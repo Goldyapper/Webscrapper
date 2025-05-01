@@ -17,12 +17,20 @@ def fetch_data(url):
 
         for item in soup.select('div.pi-item'): # a for loop that runs through at elements in the table
             label = item.select_one('h3.pi-data-label')
+            print(label)
             #Doctor Data retrival
             if label and 'Doctor:' in label.text:
                 values = item.select('div.pi-data-value a')
                 doctor = [d.text for d in values]
 
-        return(doctor)
+            #companion retrival    
+            if label and 'Companion(s):' in label.text:
+            # Get all linked companions (some entries have multiple links)
+                values = item.select('div.pi-data-value a')
+                companions = [c.text for c in values]
+                print(companions)
+        
+        return(doctor,companions)
 
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
