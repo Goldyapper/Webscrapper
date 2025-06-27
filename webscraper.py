@@ -39,18 +39,21 @@ def doctorconverter(data):
 
 
 
-def fetch_data(name, media_type):
-	# URL of the website to fetch data from
-	if media_type == "audio":
-		media = "_(audio_story)"
-	elif media_type == "tv":
-		media = "_(TV_story)"
-	elif media_type == "novel":
-		media = "_(novel)"
-	else:
-		media = ""
+def fetch_data(name):
+	#######
+	#add in media_type as an input for the function
+	#######
+	# if media_type == "audio":
+	# 	media = "_(audio_story)"
+	# elif media_type == "tv":
+	# 	media = "_(TV_story)"
+	# elif media_type == "novel":
+	# 	media = "_(novel)"
+	# else:
+	# 	media = ""
 
-	episode_formatted = smart_capitalize(name).replace(" ","_")
+	episode_name = smart_capitalize(name)
+	episode_formatted = episode_name.replace(" ","_")
 
     #url = "https://tardis.wiki/wiki/" + episode_formatted + media
 
@@ -80,14 +83,8 @@ def fetch_data(name, media_type):
 			# Extract values
 			values = [a.text.strip() for a in value_element.select('a')] or [value_element.text.strip()]
 
-			if 'Number of parts:' in label_text:
-				parts = value_element.text.strip()
-
-			elif 'Doctor:' in label_text:
+			if 'Doctor:' in label_text:
 				doctor = values
-
-			elif 'Main character' in label_text:
-				main_character = values
 
 			elif 'Companion' in label_text:
 				companions = values
@@ -112,10 +109,10 @@ def fetch_data(name, media_type):
 		#featuring = doctorconverter(featuring)
 
 
-		if not any([season, parts, doctor, main_character, companions, featuring, enemy, writer, director]):
+		if not any([season, doctor, companions, featuring, enemy, writer, director]):
 			raise KeyError("No valid data found on the page.")
 		else:
-			return [episode_formatted],season,parts,doctor,main_character,companions,featuring,enemy,writer,director
+			return [episode_name],season,doctor,companions,featuring,enemy,writer,director
 
 	except requests.exceptions.RequestException as e:
 		#print(f"An error occurred: {e}")
@@ -128,11 +125,12 @@ def fetch_data(name, media_type):
 
 def txt_reader(input_file):
 	with open(input_file) as file:
-		for line in file:
-			print(fetch_data(line.rstrip(),"N/A"))
+		return [line.strip() for line in file]
 
 
-print(txt_reader("input.txt"))
+lines = txt_reader("input.txt")
 
-print(fetch_data("rose","N/A"))
-# The above code fetches data from the specified URL and prints it.
+for item in lines:
+    print(fetch_data(item))
+
+# The above code fetches data from the specified name and prints it.
