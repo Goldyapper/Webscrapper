@@ -67,8 +67,7 @@ def fetch_data(name):
 
 		# Access the content of the response
 		soup = BeautifulSoup(response.text, 'html.parser')
-		season = parts = ''
-		doctor = main_character = companions = featuring = enemy = writer = director = ''
+		season = doctor = companions = featuring = enemy = writer = director = ''
 		
 		for item in soup.select('div.pi-item'): # a for loop that runs through at elements in the table
 			label = item.select_one('h3.pi-data-label')
@@ -122,15 +121,3 @@ def fetch_data(name):
 		print(f"Data missing: {e}")
 		return ('N/A',)*9 
 	
-
-def txt_reader(input_file):
-	with open(input_file) as file:
-		return [line.strip() for line in file]
-
-
-lines = txt_reader("input.txt")
-
-for item in lines:
-    print(fetch_data(item))
-
-# The above code fetches data from the specified name and prints it.
