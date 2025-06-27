@@ -19,14 +19,14 @@ def database_adder(episode_data):
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS episodes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
+        name TEXT NOT NULL,
         season TEXT,
-        doctor TEXT,
+        doctor TEXT NOT NULL,
         companions TEXT,
         featuring TEXT,
         villains TEXT,
-        writer TEXT,
-        director TEXT
+        writer TEXT NOT NULL,
+        director TEXT NOT NULL
     )
     ''')
 
