@@ -2,7 +2,7 @@ import sqlite3
 
 def database_adder(episode_data):
     
-    title = episode_data[0][0] if episode_data[0] else None
+    name = episode_data[0][0] if episode_data[0] else None
     season = episode_data[1][0] if episode_data[1] else None
     doctor = episode_data[2][0] if episode_data[2] else None
     companions = ', '.join(episode_data[3]) if episode_data[3] else ''
@@ -19,7 +19,7 @@ def database_adder(episode_data):
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS episodes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT,
+        name TEXT,
         season TEXT,
         doctor TEXT,
         companions TEXT,
@@ -31,9 +31,9 @@ def database_adder(episode_data):
     ''')
 
     cursor.execute('''
-    INSERT INTO episodes (title, doctor, season, companions, featuring, villains, writer, director)
+    INSERT INTO episodes (name, doctor, season, companions, featuring, villains, writer, director)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (title, doctor, season, companions, featuring, villains, writer, director))
+    ''', (name, doctor, season, companions, featuring, villains, writer, director))
 
 
     # Save and close
