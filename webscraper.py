@@ -108,14 +108,14 @@ def fetch_data(name, media_type):
 				season = values
 		
 		# Apply doctor converter
-		doctor = doctorconverter(doctor)
-		featuring = doctorconverter(featuring)
+		#doctor = doctorconverter(doctor)
+		#featuring = doctorconverter(featuring)
 
 
 		if not any([season, parts, doctor, main_character, companions, featuring, enemy, writer, director]):
 			raise KeyError("No valid data found on the page.")
 		else:
-			return season,parts,doctor,main_character,companions,featuring,enemy,writer,director
+			return [episode_formatted],season,parts,doctor,main_character,companions,featuring,enemy,writer,director
 
 	except requests.exceptions.RequestException as e:
 		#print(f"An error occurred: {e}")
@@ -124,6 +124,15 @@ def fetch_data(name, media_type):
 	except KeyError as e:
 		print(f"Data missing: {e}")
 		return ('N/A',)*9 
+	
+
+def txt_reader(input_file):
+	with open(input_file) as file:
+		for line in file:
+			print(fetch_data(line.rstrip(),"N/A"))
+
+
+print(txt_reader("input.txt"))
 
 print(fetch_data("rose","N/A"))
 # The above code fetches data from the specified URL and prints it.
