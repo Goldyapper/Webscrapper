@@ -9,6 +9,7 @@ def txt_reader(input_file):
 
 lines = txt_reader("input.txt")
 
+print(fetch_data("rose"))
 database_adder(fetch_data("rose"))
 # for item in lines:
 #     print(fetch_data(item))
