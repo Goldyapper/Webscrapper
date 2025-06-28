@@ -3,7 +3,7 @@ import sqlite3
 def database_adder(episode_data):
     
     name = episode_data[0][0] if episode_data[0] else None
-    season = episode_data[1][0] if episode_data[1] else None
+    season = episode_data[1][0] if episode_data[1] else "1"
     doctor = episode_data[2][0] if episode_data[2] else None
     companions = ', '.join(episode_data[3]) if episode_data[3] else ''
     featuring = ', '.join(episode_data[4]) if episode_data[4] else ''
@@ -18,7 +18,7 @@ def database_adder(episode_data):
     # Create table 
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS episodes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY,
         name TEXT NOT NULL,
         season TEXT,
         doctor TEXT NOT NULL,
@@ -30,10 +30,16 @@ def database_adder(episode_data):
     )
     ''')
 
+    # Get the highest ID manually
+    cursor.execute('SELECT MAX(id) FROM episodes')
+    result = cursor.fetchone()
+    id = (result[0] or 0) + 1
+
+
     cursor.execute('''
-    INSERT INTO episodes (name, doctor, season, companions, featuring, villains, writer, director)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (name, doctor, season, companions, featuring, villains, writer, director))
+    INSERT INTO episodes (id, name, doctor, season, companions, featuring, villains, writer, director)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (id, name, doctor, season, companions, featuring, villains, writer, director))
 
 
     # Save and close
