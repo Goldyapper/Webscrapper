@@ -67,7 +67,7 @@ def fetch_data(name):
 
 		# Access the content of the response
 		soup = BeautifulSoup(response.text, 'html.parser')
-		season = doctor = companions = featuring = enemy = writer = director = ''
+		season = doctor = companions = featuring = enemy = writer = director = air_date =  setting = ''
 		
 		for item in soup.select('div.pi-item'): # a for loop that runs through at elements in the table
 			label = item.select_one('h3.pi-data-label')
@@ -94,6 +94,9 @@ def fetch_data(name):
 			elif 'Main enemy' in label_text:
 				enemy = values
 
+			elif 'Main setting' in label_text:
+				setting = values
+
 			elif 'Writers' in label_text or 'Writer' in label_text:
 				writer = values
 
@@ -102,22 +105,25 @@ def fetch_data(name):
 
 			elif 'Part of' in label_text:
 				season = values
+
+			elif 'Premiere broadcast' in label_text:
+				air_date = values
 		
 		# Apply doctor converter
 		#doctor = doctorconverter(doctor)
 		#featuring = doctorconverter(featuring)
 
 
-		if not any([season, doctor, companions, featuring, enemy, writer, director]):
+		if not any([season, doctor, companions, featuring, enemy,setting, writer, director,air_date]):
 			raise KeyError("No valid data found on the page.")
 		else:
-			return [episode_name],season,doctor,companions,featuring,enemy,writer,director
+			return [episode_name],season,doctor,companions,featuring,enemy,setting, writer,director,air_date
 
 	except requests.exceptions.RequestException as e:
 		#print(f"An error occurred: {e}")
-		return ('N/A',)*9  # Return a default tuple
+		return ('N/A',)*10  # Return a default tuple
 	
 	except KeyError as e:
 		print(f"Data missing: {e}")
-		return ('N/A',)*9 
+		return ('N/A',)*10 
 	

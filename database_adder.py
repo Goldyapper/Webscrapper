@@ -8,8 +8,10 @@ def database_adder(episode_data):
     companions = ', '.join(episode_data[3]) if episode_data[3] else ''
     featuring = ', '.join(episode_data[4]) if episode_data[4] else ''
     villains = ', '.join(episode_data[5]) if episode_data[5] else ''
-    writer = ', '.join(episode_data[6]) if episode_data[6] else ''
-    director = ', '.join(episode_data[7]) if episode_data[7] else ''
+    setting = ', '.join(episode_data[6]) if episode_data[5] else ''
+    writer = ', '.join(episode_data[7]) if episode_data[6] else ''
+    director = ', '.join(episode_data[8]) if episode_data[7] else ''
+    air_date = ', '.join(episode_data[9]) if episode_data[8] else ''
     
     # Connect to SQLite DB
     conn = sqlite3.connect('doctor_who.db')
@@ -25,8 +27,10 @@ def database_adder(episode_data):
         companions TEXT,
         featuring TEXT,
         villains TEXT,
+        setting TEXT,
         writer TEXT NOT NULL,
-        director TEXT NOT NULL
+        director TEXT NOT NULL,
+        air_date TEXT
     )
     ''')
 
@@ -37,9 +41,9 @@ def database_adder(episode_data):
 
 
     cursor.execute('''
-    INSERT INTO episodes (id, name, doctor, season, companions, featuring, villains, writer, director)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (id, name, doctor, season, companions, featuring, villains, writer, director))
+    INSERT INTO episodes (id, name, doctor, season, companions, featuring, villains, setting, writer, director, air_date)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (id, name, doctor, season, companions, featuring, villains, setting, writer, director, air_date))
 
 
     # Save and close
