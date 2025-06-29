@@ -1,5 +1,16 @@
 import requests
 from bs4 import BeautifulSoup
+import re
+
+def clean_text(value):
+    if isinstance(value, str):
+        cleaned = re.sub(r'\[nb \d+\]', '', value)
+        return [cleaned.strip()] if cleaned.strip() else []
+    elif isinstance(value, list):
+        return [re.sub(r'\[nb \d+\]', '', v).strip() for v in value if v.strip()]
+    return []
+
+
 
 def smart_capitalize(text):
     exceptions = {'the', 'of', 'for', 'and', 'a', 'an', 'in', 'on', 'at', 'to', 'with'}
@@ -83,31 +94,31 @@ def fetch_data(name):
 			values = [a.text.strip() for a in value_element.select('a')] or [value_element.text.strip()]
 
 			if 'Doctor:' in label_text:
-				doctor = values
+				doctor = clean_text(values)
 
 			elif 'Companion' in label_text:
-				companions = values
+				companions = clean_text(values)
 
 			elif 'Featuring' in label_text:
-				featuring = values
+				featuring = clean_text(values)
 
 			elif 'Main enemy' in label_text:
-				enemy = values
+				enemy = clean_text(values)
 
 			elif 'Main setting' in label_text:
-				setting = values
+				setting = clean_text(values)
 
 			elif 'Writers' in label_text or 'Writer' in label_text:
-				writer = values
+				writer = clean_text(values)
 
 			elif 'Director' in label_text:
-				director = values
+				director = clean_text(values)
 
 			elif 'Part of' in label_text:
-				season = values
+				season = clean_text(values)
 
 			elif 'Premiere broadcast' in label_text:
-				air_date = values
+				air_date = clean_text(values)
 		
 		# Apply doctor converter
 		#doctor = doctorconverter(doctor)
